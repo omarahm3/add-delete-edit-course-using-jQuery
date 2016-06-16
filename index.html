@@ -1,0 +1,121 @@
+<html>
+<head>
+	<title>Add/edit/delete courses with jQuery</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<style type="text/css" media="screen">
+		a {
+		    text-decoration: none;
+		    color: #900000;
+		}
+	</style>
+	<script type="text/javascript">
+
+	var delCount=0;
+
+		function goBack(){
+			$('#mg').fadeOut('slow', go());
+			function go(){
+				$('#cTable').fadeIn('slow');
+
+			}
+			
+		}
+		function del(r){
+			
+			var x = confirm("Are you sure you want to delete this row?");
+			var i = r.parentNode.parentNode.rowIndex;
+
+			if (x){
+				document.getElementById('cTable').deleteRow(i);
+				
+				//if it was redirecting to a confirmation page 
+				//window.location.href = "del.html";
+				//but this will cause all the elements to be deleted because they aren't saved yet! it need a DB! 
+				
+				$('#cTable').fadeOut('slow', go());
+				function go(){
+					$('#msg').html('<p id="mg"> Row has been deleted successfully. <button onclick="goBack()">Back</button> </p>');
+				}
+				delCount++;
+			}
+		}
+
+		function edtFunc(i){
+			$('#edt').fadeOut('slow', go());
+			function go(){
+				$('#cTable').fadeIn('slow');
+				var courseName = $("#cN").val();
+				var studentName = $("#sN").val();
+				
+				$('#tr'+i).find('#trCName').text(courseName);
+				$('#tr'+i).find('#trSName').text(studentName);
+			}
+		}
+
+		function edit(i){
+
+			$('#cTable').fadeOut('slow', go());
+
+			function go(){
+				$('#edt').html( 'Course Name: <input type="text" id="cN" value="" placeholder=""> <br>' 
+						 	 +  'Student Name: <input type="text" id="sN" value="" placeholder=""> <br>'
+						 	 +  '<button id="edtButton" onclick="edtFunc('+ i +')">Edit</button>');
+				$('#edt').fadeIn('slow');
+			}	
+		}
+
+
+		$(document).ready(function(){
+			
+			var i=1;
+			$('#edt').hide();
+			$("#add").click(function(){
+				$('#cTable').find('tbody')
+				.append($('<tr id="tr'+ i + '">')
+					.append(    $('<td>').append(i)    																)
+					.append(    $('<td id="trCName">').append( $("#cName").val() )       							)
+				 	.append(    $('<td id="trSName">').append( $("#sName").val() )       							)
+				 	.append(    $('<td>').html('<p onclick="edit(' + i + ')"><a href="#">Edit</a></p>')		  		)
+				 	.append(    $('<td>').html('<p id="#dl" onclick="del (this)"><a href="#">Delete</a>' )     	 	)
+				);
+				i++;
+			});
+
+		});
+	</script>
+</head>
+<body>
+	
+	<div id="msg">
+		
+		
+	
+	</div>
+
+	<div id="edt">
+			
+	</div>
+	<table border="1" width="100%" id="cTable">
+		<caption>
+			<input type="text" id="cName" value="Course Name" placeholder="">
+			<input type="text" id="sName" value="Student Name" placeholder="">
+			<button id="add">ADD</button> <br> <br>
+		</caption>
+		<thead>
+			<tr align="center">
+				<th>#</th>
+				<th>Course Name</th>
+				<th>Student Name</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody align="center">
+			
+		</tbody>
+	</table>
+	
+	
+
+</body>
+</html>
